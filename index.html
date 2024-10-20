@@ -2,18 +2,116 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="styles.css" />
-    <title>Project 3</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Project 4</title>
   </head>
 
   <body class="pageContents">
+    <h1>Project 4 - IMAGE WARPING and MOSAICING</h1>
     <div class="wrapper">
       <h2 class="title">Background of the project:</h2>
       <p class="introduction">
-        In this project, we are asked to morph a face to another face, and
-        create an animation (gif) for that. We also need to compute the "mean"
-        face of a population, and extrapolate from the "mean" face to create a
-        caricature of myself.
+        In this project, we are asked to take the pictures that we like
+        ourselves, and then warp one of the image into the other using the
+        Homography computed by the chosen correspondeing points. And then
+        blend/stitch the image together to get a mosaic of the images.
       </p>
+      <h3>Part 1. Take the picture you like</h3>
+      <p class="description">
+        This seems like an easy task, but this task is really the root of having
+        a good results. There are several things that you need to be careful
+        when taking the picture:
+      </p>
+      <ol>
+        <li>
+          When you take the pictures, you need to make sure that all the
+          pictures that you take have the same center of projection (COP). So
+          when you take the pictures, you need to rotate your camera base on the
+          axis of where the camera located. Not where you are standing, not the
+          middle of the phone.
+        </li>
+        <li>
+          The pictures that you take should have 40% ~ 70% of overlap between
+          each consecutive picture for enough correspondency and easier
+          registration
+        </li>
+        <li>
+          It is best to take pictures of stationary scene, if you want to take
+          picture of something moving in the scene, try to take each consecutive
+          picture as fast as you cn to minimize the movement in each picture.
+          One exception is that you want the effects for artistic reason.
+        </li>
+      </ol>
+      <p class="imgTitle">Some Examples:</p>
+      <div class="imageWrapper">
+        <img src="images/cory529(2).jpg" class="resultImage" />
+        <img src="images/cory529(3).jpg" class="resultImage" />
+      </div>
+      <div class="imageWrapper">
+        <img src="images/bedroom1.jpg" class="resultImage" />
+        <img src="images/bedroom2.jpg" class="resultImage" />
+      </div>
+      <div class="imageWrapper">
+        <img src="images/kitchen1.jpg" class="resultImage" />
+        <img src="images/kitchen2.jpg" class="resultImage" />
+      </div>
+      <hr />
+      <h3>Part 2. Defining Correspondences</h3>
+      <p class="description">
+        Just like what we did in project 3. In order for the warping to work, we
+        need consistent labeling point on both images. Which we need to define
+        the correspondence manually on different items and elements in the
+        images
+        <br /><br />
+        In this case, I tried to use barebone
+        <a
+          href=" https://www.geeksforgeeks.org/matplotlib-pyplot-ginput-in-python/"
+          >ginput()</a
+        >
+        funtion at first, which works fine and it only required several lines of
+        code. The problem is, you will need to redo the whole choosing process
+        if you make mistakes in the middle. And you also need to write extra
+        code to save the correspondeing points into a json file for future use.
+        So I instead just used
+        <a href="https://cal-cs180.github.io/fa23/hw/proj3/tool.html">this</a>
+        labeling tool that is provided in the project 3 assignment specs for
+        labeling the correspondence. And it provide the feature that allow the
+        users to delete any points they chose during the choosing process, which
+        is really convenient. It automatically save the correspondeing points
+        into a json file as well.
+      </p>
+
+      <p>
+        <b class="note">Note:</b> For the next part, you need to choose at least
+        4 points to compute the Homography. and if you are taking your picture
+        using iphone, which I did. I will suggest you should shrink the image
+        for choosing points and for later warping and blending as well. This is
+        because the original picture taken by iphone is too big, it will then
+        cause your warping and blending a lot of time.
+      </p>
+      <p>
+        <b class="suggestion">Suggestion:</b> Generally. more correspondency is
+        better. But if you have some good pictures for easy registration and
+        correspondency, you can still get a good results with less points
+      </p>
+
+      <p class="imgTitle">Corresponding Points Examples:</p>
+      <div class="imageWrapper">
+        <img
+          src="images/resized with scatter points cory529(2).jpg"
+          class="resultImage"
+        />
+        <img
+          src="images/resized with scatter points cory529(3).jpg"
+          class="resultImage"
+        />
+      </div>
+      <hr />
+      <h3>Part 3. Compute Homography</h3>
     </div>
   </body>
 </html>
