@@ -112,6 +112,42 @@
       </div>
       <hr />
       <h3>Part 3. Compute Homography</h3>
+      <p class="description">
+        How can we warp one image into alignment of the other image? Which we
+        will need to compute the Homoraphy between 2 images' correspondency that
+        we chose in the previous part. Where H (Homography) is a 3 by 3 matrix
+        with 8 degree of freedom (last element is scale). Here are the hand
+        wriiten notes of mine about how to compute the Homogeaphy base on the
+        correspondency points:
+      </p>
+
+      <p class="imgTitle">Homogeaphy details:</p>
+      <div class="imageWrapper">
+        <img src="images/Homography note1.jpeg" class="noteImage" />
+      </div>
+      <div class="imageWrapper">
+        <img src="images/Homography note2.jpeg" class="noteImage" />
+      </div>
+      <div class="imageWrapper">
+        <img src="images/Homography note3.jpeg" class="noteImage" />
+      </div>
+      <p class="description">
+        After you have the above equations setup, you can solve the matrix
+        easily by using least square solution
+      </p>
+      <p>
+        <b class="note">Note:</b> We can now see why we need at least 4
+        correspondencies to solve a homograhpy. And the above equations are only
+        for 1 correspondency. For more Correspondencies, just stack more left
+        most matrix with different x1, x2, y1, y2 vertically.
+      </p>
+      <p>
+        <b class="suggestion">Suggestion:</b> For sanity check, you can call one
+        of the functions that is prohibited as stated in project spec to see
+        whether the H you computed is correct or not. It is normal that the
+        results you have will be a little different than the one you get from
+        the function. But don't worry about it if it is really small.
+      </p>
     </div>
   </body>
 </html>
