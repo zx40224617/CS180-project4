@@ -172,6 +172,61 @@
         there are negative coordinates after warping. But the function I
         implement shows the whole warped image
       </p>
+      <hr />
+      <h3>Part 5. Image Retification</h3>
+      <p class="description">
+        Here comes the part where you can test whether your code for homograhpy
+        and warping are correct or not (if you didn't use the sanity check).
+        What we need to do here is bascially take a picture with some rectangle
+        objects in the scene and define a rectangle area by yourself so that you
+        can compute the homography base on the points you choose around the
+        rectnagle objects in the scenes and the rectangle area you define
+        yourself (I used [[0, 0], [200, 0], [200, 200], [0, 200]] here myself).
+      </p>
+      <p class="imgTitle">My result:</p>
+      <div class="imageWrapper">
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Original Image:</p>
+          <img src="images/ipad.jpg" class="resultImage" />
+        </div>
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Rectified Image:</p>
+          <img src="images/rectified ipad.jpg" class="resultImage" />
+        </div>
+      </div>
+      <div class="imageWrapper">
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Original Image:</p>
+          <img src="images/kurumi2.jpg" class="resultImage" />
+        </div>
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Rectified Image:</p>
+          <img src="images/rectified kurumi.jpg" class="resultImage" />
+        </div>
+      </div>
+      <p class="description">
+        You can now observe that, the result image is just like looking right
+        down to the object from the top, intead of from the side in the original
+        image.
+      </p>
+      <p>
+        <b class="note">Note:</b>
+        If your result image is not stable or not good enough, you can try to
+        choose more points on the rectangle instead of just using the 4 corners
+        like I did. And if your original image is taken from a really off angle,
+        your result image will look good only in a small portion of the image,
+        all other parts will look really stretched. You can crop the image for
+        only the good part for the result.
+      </p>
+      <p>
+        <b class="suggestion">Suggestion:</b> if you know your original
+        rectangle object's shape (height, width proportion), you can also define
+        your rectangle into the same proportion for a better result (like
+        instead of using a 200 * 200 square, I should probably use some other
+        rectangle shape if I kow the exact proportion since ipad is not a
+        square, but this is not requied).
+      </p>
+      <hr />
     </div>
   </body>
 </html>
