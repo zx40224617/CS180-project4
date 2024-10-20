@@ -87,7 +87,7 @@
 
       <p>
         <b class="note">Note:</b> For the next part, you need to choose at least
-        4 points to compute the Homography. and if you are taking your picture
+        4 points to compute the Homography. And if you are taking your picture
         using iphone, which I did. I will suggest you should shrink the image
         for choosing points and for later warping and blending as well. This is
         because the original picture taken by iphone is too big, it will then
@@ -96,7 +96,8 @@
       <p>
         <b class="suggestion">Suggestion:</b> Generally. more correspondency is
         better. But if you have some good pictures for easy registration and
-        correspondency, you can still get a good results with less points
+        correspondency, you can still get a good results with less points (at
+        least 4!)
       </p>
 
       <p class="imgTitle">Corresponding Points Examples:</p>
@@ -149,14 +150,26 @@
       <h3>Part 4. Warp Image</h3>
       <p class="description">
         Now we know how to compute the Homography, we can use the Homography
-        that we computed to warp an image to the refernce image. Here are my
+        that we computed to warp an image to the reference image. Here are my
         hand written notes about how to wap image:
       </p>
-      <p class="imgTitle">warping details:</p>
+      <p class="imgTitle" id="warpingNotes">warping details:</p>
       <div class="noteImageWrapper">
-        <img src="images/warping note1.jpeg" class="noteImage" />
-        <img src="images/warping note2.jpeg" class="noteImage" />
-        <img src="images/warping note3.jpeg" class="noteImage" />
+        <img
+          src="images/warping note1.jpeg"
+          class="noteImage"
+          id="warpingNote1"
+        />
+        <img
+          src="images/warping note2.jpeg"
+          class="noteImage"
+          id="warpingNote2"
+        />
+        <img
+          src="images/warping note3.jpeg"
+          class="noteImage"
+          id="warpingNote3"
+        />
       </div>
 
       <p>
@@ -206,8 +219,7 @@
       </div>
       <p class="description">
         You can now observe that, the result image is just like looking right
-        down to the object from the top, intead of from the side in the original
-        image.
+        into the object instead of from the side in the original image.
       </p>
       <p>
         <b class="note">Note:</b>
@@ -227,6 +239,156 @@
         square, but this is not requied).
       </p>
       <hr />
+      <h3>Part 5. Blend the images into a mosaic</h3>
+      <p class="description">
+        After you got your rectification working, which means your codes for
+        homograhpy and warping are working as well. We can now get into the main
+        idea of this ptoject (project 4a), which is image mosaic. The idea is
+        really easy, you first warp one image to the reference image. and blend
+        the warped image and the reference image into a big mosaic. The idea of
+        warping image is the same as image retification, but instead of using a
+        rectangle that you define yourself, you use the correspondency points to
+        compute homography. And for the blending part, I just use my code from
+        project 2 and tweak it a little to blend the image using the mask I
+        create.
+      </p>
+      <p class="imgTitle">My result:</p>
+      <div class="imageWrapper">
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Original Image 1:</p>
+          <img src="images/cory529(2).jpg" class="resultImage" />
+        </div>
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Original Image 2:</p>
+          <img src="images/cory529(3).jpg" class="resultImage" />
+        </div>
+      </div>
+      <div class="imageWrapper">
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Blended Image:</p>
+          <img src="images/Blend of cory529.jpg" class="resultImage" />
+        </div>
+      </div>
+      <div class="imageWrapper">
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Original Image 1:</p>
+          <img src="images/bedroom1.jpg" class="resultImage" />
+        </div>
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Original Image 2:</p>
+          <img src="images/bedroom2.jpg" class="resultImage" />
+        </div>
+      </div>
+      <div class="imageWrapper">
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Blended Image:</p>
+          <img src="images/Blend of bedroom.jpg" class="resultImage" />
+        </div>
+      </div>
+      <div class="imageWrapper">
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Original Image 1:</p>
+          <img src="images/kitchen1.jpg" class="resultImage" />
+        </div>
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Original Image 2:</p>
+          <img src="images/kitchen2.jpg" class="resultImage" />
+        </div>
+      </div>
+      <div class="imageWrapper">
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Blended Image:</p>
+          <img src="images/Blend of kitchen.jpg" class="resultImage" />
+        </div>
+      </div>
+      <p>
+        <b class="note">Note:</b>
+        Since when we warp one image to the reference image, there are some
+        translation happening (like mentioned in the above section). We need to
+        keep track of that translation and apply that to the reference image as
+        well when perform blending.
+      </p>
+      <p>
+        <b class="suggestion">Suggestion:</b> Although alpha blending (channel)
+        is also mentioned in the project spec, I think Laplacian pyramid
+        blending generally performs better for blending and easier to implement
+        since you have went through that already in project 2. You probably just
+        need a little modification in the code.
+      </p>
+      <h4>Some general Q & A about Blending</h4>
+      <p>
+        <b class="note">Q:</b>
+        How do you define the overall output size for the mosaic?
+      </p>
+      <p>
+        <b class="suggestion">A:</b>
+        Which is a really similar idea as how you determine the
+        <a href="#warpingNotes">ouput size for a warped image</a>. But in this
+        case, instead of considering only 4 warped points (corners) of the
+        warped image, you need to consider the translation and the 4 points
+        (corners) of the reference image as well. Here are some example
+        pictures:
+      </p>
+      <p class="imgTitle">
+        Example points you need to consider for the ouput mosaic size:
+      </p>
+      <div class="imageWrapper">
+        <img src="images/output_size example 1.jpg" class="resultImage" />
+        <img src="images/output_size example 2.jpg" class="resultImage" />
+      </div>
+      <p class="description">
+        Just like image warping, you now find the min_x, min_y, max_x, max_y
+        using all the points and define the output mosaic size.
+      </p>
+      <p>
+        <b class="note">Q:</b>
+        How do you create the irregular mask for blending?
+      </p>
+      <p>
+        <b class="suggestion">A:</b>
+        For this task, I am using a really naive idea suggested by a TA. Which
+        probably only work for vertical and horizontal blending, but is
+        sufficient for this task. I first find the mid point of x coordinate (or
+        y coordinate if you are doing a vertical blending) of the overlap part
+        of the 2 images, and then create a mask base on the coordinate, here are
+        some example pictures:
+      </p>
+      <p class="imgTitle">Example images for creating the irregular mask:</p>
+      <div class="imageWrapper">
+        <img src="images/mask example 2.jpg" class="resultImage" />
+        <img src="images/mask example 1.jpg" class="resultImage" />
+      </div>
+      <p class="description">
+        As you can see, the cutoff of the mask is not exactly in the middle, but
+        it is at the middle of the overlap part. And the idea of calculating the
+        x coordinate of the mask cutoff is really easy as well. Just use the 4
+        points in the middle overlap part, which are the 4 middle blue points
+        shown in the previous question. (I only used 2 points since the x
+        coordinate of an image on the same side should be really close). And you
+        can implement the same idea if you are doing vertical blending, but you
+        now need to create the mask base on y coordinate cutoff. After I get the
+        mask, I just throw the 2 images and the mask into my Laplacian blending
+        code from project 2.
+      </p>
+      <p>
+        <b class="note">Warning:</b>
+        As I mentioned above, and you can porbably tell by now, this method only
+        works for easy blending task like vertical and horizontal blending. If
+        you want a more robust way of creating a mask, you can consider using
+        the bwdist() (distance transform) method mentioned in lecture for
+        creating mask.
+      </p>
+      <hr />
+      <h3>Final reflection on project 4a</h3>
+      <p class="description">
+        I really enjoy the time of doing this project because extended reality
+        is the area that I interested in for a long time already, and I think
+        this project introduce a little basic of the technology and theory to
+        us. I really hope I can have more time for 360 Cylindrical panorama B&W,
+        which I think will be really interesting and even more like extended
+        reality environment. But unfortunately I have no time because of the
+        midterms. But I will try to implement that during my own time.
+      </p>
     </div>
   </body>
 </html>
