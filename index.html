@@ -459,12 +459,24 @@
       <p class="description">
         The idea of ANMS is really easy. Basically, all the points that you see
         in the images right now are the "strongest" in the circle area with some
-        radius of r. The strength is depends on the h value that the harris
-        corner method return corresponding to each coordinates. And we find all
-        the r that satisfy the following formula: \( r_i = \min_{i} \, \lvert
-        \vec{x}_i - \vec{x}_j \rvert \; \forall \; \vec{x}_j : h(\vec{x}_i) <
-        c_{\text{robust}} \, h(\vec{x}_j) \)
+        radius of r. The strength is the h value that the provided harris corner
+        method return corresponding to each coordinates. And we find all the r
+        that satisfy the following formula: \( r_i = \min_{j} \, \lvert
+        \vec{x}_i - \vec{x}_j \rvert \;, s.t. h(\vec{x}_i) < c_{\text{robust}}
+        \, h(\vec{x}_j) \). And \(c_{\text{robust}} = 0.9\) (specified in the
+        paper). After you find a r for all points, you can now sort the
+        coordinates in descending order (from high to low) using r, and specify
+        how many points you want. In my case here, I have 300 points.
       </p>
+      <p>
+        <b class="note">Note: </b>
+        You can vectorize the calculation using the dist2() method that is given
+        in the same starter code as the harris corner detector. Which will be a
+        lot faster than the navie idea of using 2 nested for loops. But I
+        personally do the latter since it makes more sense to me. And it takes
+        roughly 2 ~ 3 min to run for the 2 images combined.
+      </p>
+      <hr />
     </div>
   </body>
 </html>
