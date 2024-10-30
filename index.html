@@ -6,7 +6,12 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
       rel="stylesheet"
     />
-
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
     <title>Project 4</title>
   </head>
 
@@ -266,7 +271,7 @@
       <div class="imageWrapper">
         <div class="title-image-wrapper">
           <p class="imagSubTitle">Blended Image:</p>
-          <img src="images/Blend of cory529.jpg" class="resultImage" />
+          <img src="images/Blend of cory.jpg" class="resultImage" />
         </div>
       </div>
       <div class="imageWrapper">
@@ -329,7 +334,7 @@
         (corners) of the reference image as well. Here are some example
         pictures:
       </p>
-      <p class="imgTitle">
+      <p class="imgTitle" id="canvases">
         Example points you need to consider for the ouput mosaic size:
       </p>
       <div class="imageWrapper">
@@ -346,48 +351,119 @@
       </p>
       <p>
         <b class="suggestion">A:</b>
-        For this task, I am using a really naive idea suggested by a TA. Which
-        probably only work for vertical and horizontal blending, but is
-        sufficient for this task. I first find the mid point of x coordinate (or
-        y coordinate if you are doing a vertical blending) of the overlap part
-        of the 2 images, and then create a mask base on the coordinate, here are
-        some example pictures:
+        For this part, I personally think it is a little bit hard to understand.
+        But in general, we need to use some method like
+        <a
+          href="https://www.geeksforgeeks.org/python-opencv-distancetransform-function/"
+          >cv2.distanceTransform()</a
+        >
+        to get the distance transform for both pictures. And use them to create
+        the mask by comparing 2 distance transform image.
       </p>
-      <p class="imgTitle">Example images for creating the irregular mask:</p>
+      <p class="imgTitle">Example distance transform images:</p>
       <div class="imageWrapper">
-        <img src="images/mask example 2.jpg" class="resultImage" />
-        <img src="images/mask example 1.jpg" class="resultImage" />
+        <img src="images/example dis transform1.jpg" class="resultImage" />
+        <img src="images/example dis transform2.jpg" class="resultImage" />
+      </div>
+      <p class="imgTitle">Example masks for blending</p>
+      <div class="imageWrapper">
+        <img src="images/example mask1 greater.jpg" class="resultImage" />
+        <img src="images/example mask2 greater.jpg" class="resultImage" />
       </div>
       <p class="description">
-        As you can see, the cutoff of the mask is not exactly in the middle, but
-        it is at the middle of the overlap part. And the idea of calculating the
-        x coordinate of the mask cutoff is really easy as well. Just use the 4
-        points in the middle overlap part, which are the 4 middle blue points
-        shown in the previous question. (I only used 2 points since the x
-        coordinate of an image on the same side should be really close). And you
-        can implement the same idea if you are doing vertical blending, but you
-        now need to create the mask base on y coordinate cutoff. After I get the
-        mask, I just throw the 2 images and the mask into my Laplacian blending
-        code from project 2.
+        What we do here is bascially just compare the 2 distance transform image
+        to create the masks. At a given pixel, if distance transform on the left
+        is greater than the distance transform on the right, we assign the the
+        mask pixel to be 1, otherwise 0. The other mask the same lgoic, but for
+        distance transform on the right is greater than the left. After you get
+        the masks, you can assign one of the mask to be the reverse mask in
+        Laplacian blending, and blend them exactly like how we did in project2.
       </p>
       <p>
-        <b class="note">Warning:</b>
-        As I mentioned above, and you can porbably tell by now, this method only
-        works for easy blending task like vertical and horizontal blending. If
-        you want a more robust way of creating a mask, you can consider using
-        the bwdist() (distance transform) method mentioned in lecture for
-        creating mask.
+        <b class="note">Note: </b>
+        As you can see, the distance transform image is based on the entire
+        output mosaic size with only one of the image instead of just the images
+        itself. The original images that you feed into cv2.distanceTransform()
+        should be something like <a href="#canvases">this</a> for creating the
+        mask.
       </p>
       <hr />
-      <h3>Final reflection on project 4a</h3>
+    </div>
+    <h1>Part B - FEATURE MATCHING for AUTOSTITCHING</h1>
+    <div class="wrapper">
+      <h2 class="title">Background of the project:</h2>
+      <p class="introduction">
+        In the second part of this project, we are technically doing the exact
+        same thing as part A in general, but we now implement the entire process
+        to be autonomous so that we don't need to define the correspondency
+        ourselves manually. For more details about the algorithm and logic that
+        we are implementing, please refer to this
+        <a
+          href="https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/Papers/MOPS.pdf"
+          >paper</a
+        >
+        that is provided in the project spec. Note that you may find out that we
+        skip some details here in our own implementation.
+      </p>
+      <h3>Part 1. Detecting corner features in an image</h3>
       <p class="description">
-        I really enjoy the time of doing this project because extended reality
-        is the area that I interested in for a long time already, and I think
-        this project introduce a little basic of the technology and theory to
-        us. I really hope I can have more time for 360 Cylindrical panorama B&W,
-        which I think will be really interesting and even more like extended
-        reality environment. But unfortunately I have no time because of the
-        midterms. But I will try to implement that during my own time.
+        As the first step, we need to find all the potential points in both
+        images (or more if you want to do a larger mosaic) that may be served as
+        the correspondency. Over here, we implement a
+        <a href="https://en.wikipedia.org/wiki/Harris_corner_detector"
+          >Harris corner detector</a
+        >
+        to detect all the corners in the image. Luckily, we are provided with
+        some
+        <a href="https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/harris.py"
+          >starter code</a
+        >
+        that we don't need to implement the harris corner detector ourselves.
+        Here are the results:
+      </p>
+      <p class="imgTitle">Harris Corner Example</p>
+      <div class="imageWrapper">
+        <img
+          src="images/resized with harris corners kitchen1.jpg"
+          class="resultImage"
+        />
+        <img
+          src="images/resized with harris corners kitchen2.jpg"
+          class="resultImage"
+        />
+      </div>
+      <p>
+        <b class="note">Note: </b>
+        Since the Harris corner method that provided to us only accept an image
+        with one channel, so please remember to grayscale your image before
+        throwing that into the harris corner function call.
+      </p>
+
+      <p class="description">
+        But as you can porbably tell, there are too many possible points that we
+        can choose right now, and we don't need all these points. In order to
+        deal with the issue, we implement ANMS algorithm to get the points that
+        are strong and also distribute across the entire image.
+      </p>
+      <p class="imgTitle">Corners after ANMS Example (300 points):</p>
+      <div class="imageWrapper">
+        <img
+          src="images/ANMS scatter points kitchen1.jpg"
+          class="resultImage"
+        />
+        <img
+          src="images/ANMS scatter points kitchen2.jpg"
+          class="resultImage"
+        />
+      </div>
+      <p class="description">
+        The idea of ANMS is really easy. Basically, all the points that you see
+        in the images right now are the "strongest" in the circle area with some
+        radius of r. The strength is depends on the h value that the harris
+        corner method return corresponding to each coordinates. And we find all
+        the r that satisfy the following formula: \( r_i = \min_{i} \, \lvert
+        \vec{x}_i - \vec{x}_j \rvert \; \forall \; \vec{x}_j : h(\vec{x}_i) <
+        c_{\text{robust}} \, h(\vec{x}_j) \)
       </p>
     </div>
   </body>
