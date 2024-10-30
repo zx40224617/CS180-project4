@@ -466,7 +466,8 @@
         \, h(\vec{x}_j) \). And \(c_{\text{robust}} = 0.9\) (specified in the
         paper). After you find a r for all points, you can now sort the
         coordinates in descending order (from high to low) using r, and specify
-        how many points you want. In my case here, I have 300 points.
+        how many points you want. In my case here, I have 300 points. And you
+        can see that the points are well distributed over the entire image.
       </p>
       <p>
         <b class="note">Note: </b>
@@ -475,6 +476,30 @@
         lot faster than the navie idea of using 2 nested for loops. But I
         personally do the latter since it makes more sense to me. And it takes
         roughly 2 ~ 3 min to run for the 2 images combined.
+      </p>
+      <hr />
+      <h3>Part 2. Extracting a Feature Descriptor for each feature point</h3>
+      <p class="description">
+        After we have the potential points, we can now start to find the
+        correspondency. But beofre that, we need to implement feature descriptor
+        to get the image patches around each coordinates so that we can compare
+        each patches to see whether they are the match or not. The idea is easy,
+        we first blur the entire image for anti-aliasing. And for each points,
+        we extract the 40 * 40 pixels area around it as a patch, and resize the
+        patch to 8 * 8. For every patch, we need to bias/gain-normalize them.
+      </p>
+      <p class="imgTitle">Example patches after normalization:</p>
+      <div class="imageWrapper">
+        <img src="images/example patches1.jpg" class="resultImage" />
+        <img src="images/example patches2.jpg" class="resultImage" />
+      </div>
+      <p>
+        <b class="note">Note: </b>
+        As you can see, I grayscale my patches here like mentioned in the paper,
+        but I also heard a lot of cases where keep the RGB produces better
+        result, so you can try both to see which is better. And the patches you
+        see in jupyter notebook should be more pixelated than what you see here.
+        It is because plt.imsave() do somethng werid to smooth things out.
       </p>
       <hr />
     </div>
