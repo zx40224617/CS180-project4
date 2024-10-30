@@ -532,6 +532,108 @@
         to adjust the threshold of the Lowe's trick.
       </p>
       <hr />
+      <h3>Part 4. Use a robust method (RANSAC) to compute a homography</h3>
+      <p class="description">
+        As we saw in the last part, even after the the feature matching, there
+        are still some outliers that will influence our computation of
+        Homography. So in order to get rid off the outliers, we implement RANSAC
+        algorithm, here are the steps:
+      </p>
+      <ol>
+        <li>Randomly chose 4 set of matching points</li>
+        <li>Compute the H using the 4 set of matching points</li>
+        <li>Warp the image using the H you computed</li>
+        <li>
+          Compute the euclidean distance between all the points after warping
+          and their matching points in the other image
+        </li>
+        <li>
+          If the computed distance in the previous step is less than a threshold
+          (2 pixels is recommened in lecture, I used 1), we consider it as an
+          inliners.
+        </li>
+        <li>keep the largest set of inliners.</li>
+        <li>
+          Compute the Homography using all the inliners in the largest set.
+        </li>
+      </ol>
+      <p class="imgTitle">Example Matching after RANSAC:</p>
+      <div class="imageWrapper">
+        <img src="images/example RANSAC.jpg" class="noteImage" />
+      </div>
+      <p class="description">
+        After you have the homograhpy computed using all the inliners in the
+        leargest set, you can use the homography to warp and blend the image
+        exactly like how we did in 4a. Here are some examples:
+      </p>
+      <p class="imgTitle">
+        Comparison between manual stiching and auto stitching:
+      </p>
+      <div class="imageWrapper">
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Manual Stitching:</p>
+          <img src="images/Blend of cory.jpg" class="resultImage" />
+        </div>
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Auto Stitching:</p>
+          <img src="images/Blend of cory_auto.jpg" class="resultImage" />
+        </div>
+      </div>
+      <div class="imageWrapper">
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Manual Stitching:</p>
+          <img src="images/Blend of kitchen.jpg" class="resultImage" />
+        </div>
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Auto Stitching:</p>
+          <img src="images/Blend of kitchen_auto.jpg" class="resultImage" />
+        </div>
+      </div>
+      <div class="imageWrapper">
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Manual Stitching:</p>
+          <img src="images/Blend of bedroom.jpg" class="resultImage" />
+        </div>
+        <div class="title-image-wrapper">
+          <p class="imagSubTitle">Auto Stitching:</p>
+          <img src="images/Blend of bedroom.jpg" class="resultImage" />
+        </div>
+      </div>
+      <p class="description">
+        As you can see, the result of auto stitching actually is the same or
+        even better quality than the manual stitching. This is because there are
+        a lot of noises when we select the points manually for computing
+        homography. Which is really obvious in the first set of image (cory
+        529), the manual stitching contains some artifacts in the top middle and
+        the door is glitching a little bit. But the auto stitching version has
+        no such issues.
+      </p>
+      <p>
+        <b class="note">Note: </b>
+        Although the suggested looping steps is 5000, you may need more if you
+        still have a lot of points after feature matching or for a more robust
+        searching. Also, the final homography you computed may be a little
+        different from the Homography that you got from the manually chosen
+        points, that is totally normal.
+      </p>
+      <p>
+        <b class="suggestion">Suggestion: </b>
+        If your matching sets looks correct after RANSAC, but the images is
+        still incorrect, the problem may caused by switched x and y coordinates.
+        I personally need to switch the columns after RANSAC and before I
+        compute the final Homography to get the correct result.
+      </p>
+      <hr />
+      <h3>Final Reflection of the Project</h3>
+      <p class="description">
+        I think this project is really interesting, especially the second part.
+        This is the first time that I get a chance to implement the algorithm
+        and idea from reading a paper. Also, I think this project gives me a
+        little introduction to my favorite topic - extended reality. The coolest
+        thing I learn from this project is definitely RANSAC. It is like magic
+        to me since the random search sound unreliable to me, but it turns out
+        to work perfectly.
+      </p>
     </div>
   </body>
 </html>
