@@ -502,6 +502,36 @@
         It is because plt.imsave() do somethng werid to smooth things out.
       </p>
       <hr />
+      <h3>Part 3. Matching these feature descriptors between two images</h3>
+      <p class="description">
+        Since we already have all the patches we need, we can now match the
+        patches by calculating euclidean distance between them. But instead of
+        setting a threshold on the closest match, we use the "Lowe's trick"
+        where we set a threshold on the ratio of first nearest neighbor error
+        over the second nearest neighbor error (error here is the euclidean
+        distance). This is because the error of the correct matches should be
+        significantly lower than the incorrect matches. But the sclae of error
+        varies a lot across the image depends on the appearance. So the Lowe's
+        trick is more robust here.
+      </p>
+      <p class="imgTitle">Example Feature Matching:</p>
+      <div class="imageWrapper">
+        <img src="images/example feature matching.jpg" class="noteImage" />
+      </div>
+      <p class="description">
+        As we can see, the matches are all correct and we have a lot less points
+        compare to what we have at first. But if you compute the homography
+        using all the points right now, it may still be off. (Sometime it may be
+        close enough that you can just warp the image right away, but it is not
+        robust). There are still some outliers, and we will get rid off them in
+        the next section.
+      </p>
+      <p>
+        <b class="note">Note: </b>
+        Although I didn't do it, but for different set of images, you may need
+        to adjust the threshold of the Lowe's trick.
+      </p>
+      <hr />
     </div>
   </body>
 </html>
